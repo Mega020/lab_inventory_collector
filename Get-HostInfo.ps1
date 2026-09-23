@@ -14,14 +14,7 @@ $data = [PSCustomObject]@{
     "Storage" = "$($logdsk.Sum/1GB -as [int]) GB"
 }
 
-$filePath = "\\PSREMOTESESSION\Data\Inventory.csv"
+$filePath = "\\PSREMOTESESSION\Data\Staging\$($os.CSName).csv"
 
-if (Test-Path -Path $filePath) {
-    $data | Export-Csv -Path $filePath -Append -NoTypeInformation
-} else {
-    $data | Export-Csv -Path $filePath -NoTypeInformation
+$data | Export-Csv -Path $filePath -NoHeader -NoTypeInformation
 
-    $acl = Get-Acl -Path $filePath
-    $acl.SetAccessRuleProtection($false, $true)
-    Set-Acl -Path $filePath -AclObject $acl
-}
